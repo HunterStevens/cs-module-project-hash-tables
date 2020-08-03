@@ -93,7 +93,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        ind = self.hash_index(key)
+        self.table[ind] = value
 
     def delete(self, key):
         """
@@ -104,6 +105,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        ind = self.hash_index(key)
+        if self.table[ind] is None:
+            print("Couldn't find entry with that key")
+        else:
+            self.table[ind] = None
 
 
     def get(self, key):
@@ -115,6 +121,12 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        ind = self.hash_index(key)
+
+        if self.table[ind] is None:
+            return None
+        else:
+            return self.table[ind]
 
 
     def resize(self, new_capacity):
