@@ -26,7 +26,8 @@ class HashTable:
             self.capacity = capacity
         elif capacity < MIN_CAPACITY:
             self.capacity = MIN_CAPACITY
-        self.table = [HashTableEntry] * self.capacity
+        self.count_items = 0
+        self.table = [HashTableEntry(None, None)] * self.capacity
 
 
     def get_num_slots(self):
@@ -70,9 +71,9 @@ class HashTable:
         """
         # Your code here
         hash = 5381
-        for x in s:
-            hash = (( hash << 5) + hash) + ord(x)
-        return hash & 0xFFFFFFFF
+        for c in key:
+          hash = (hash * 33) + ord(c)
+        return hash
 
 
     def hash_index(self, key):
