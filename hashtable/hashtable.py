@@ -51,6 +51,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.count_items / self.capacity
 
 
     def fnv1(self, key):
@@ -93,8 +94,37 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        
+        # ind = self.hash_index(key)
+        # self.table[ind] = value
+
         ind = self.hash_index(key)
-        self.table[ind] = value
+        cur = self.table[ind]
+        # prev = None
+        while True:
+            if cur.key:
+                if cur.key == key:
+                    cur.value = value
+                    break
+                elif cur.next:
+                    # prev = cur
+                    cur = cur.next
+                else:
+                    cur.next = HashTableEntry(key,value)
+                    self.count_items += 1
+                    break   
+            else:
+                cur.key = key
+                cur.value = value
+                self.count_items += 1
+                break
+        if self.get_load_factor() > 0.7:
+            # print(self.get_load_factor())
+            new_cap = self.capacity * 2
+            # print(new_cap)
+            self.resize(new_cap)
+                
+                
 
     def delete(self, key):
         """
@@ -106,10 +136,23 @@ class HashTable:
         """
         # Your code here
         ind = self.hash_index(key)
-        if self.table[ind] is None:
-            print("Couldn't find entry with that key")
-        else:
-            self.table[ind] = None
+        # if self.table[ind] is None:
+        #     print("Couldn't find entry with that key")
+        # else:
+        #     self.table[ind] = None
+        # prev = None
+        cur = self.table[ind]
+        while True:
+            if cur.key:
+                if cur.key == key:
+                    cur.value = None
+                    break
+                elif cur.next:
+                    # prev = cur
+                    cur = cur.next 
+            else:
+                print("Couldn't find entry with that key")
+                return None
 
 
     def get(self, key):
@@ -122,11 +165,21 @@ class HashTable:
         """
         # Your code here
         ind = self.hash_index(key)
-
-        if self.table[ind] is None:
-            return None
-        else:
-            return self.table[ind]
+        # if self.table[ind] is None:
+        #     return None
+        # else:
+        #     return self.table[ind]
+        cur = self.table[ind]
+        while True:
+            if cur.key:
+                if cur.key == key:
+                    return cur.value
+                elif cur.next:
+                    # prev = cur
+                    cur = cur.next 
+            else:
+                print("Couldn't find entry with that key")
+                return None
 
 
     def resize(self, new_capacity):
@@ -137,6 +190,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        old_table = self.table
+        self.capacity = new_capacity
+        self.table = [HashTableEntry(None, None)] * self.capacity
+        # print(self.table)
+        for i in old_table:
+            cur = i
+            while cur.key:
+                # print("\n")
+                # print(cur.key)
+                # print(cur.next.key)
+                self.put(cur.key, cur.value)
+                if cur.next:
+                    cur = cur.next
+                else:
+                    break
 
 
 
